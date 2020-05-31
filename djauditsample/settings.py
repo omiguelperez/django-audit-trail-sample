@@ -39,13 +39,17 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-LOCAL_APPS = [
-    'companies',
+THIRD_PARTY_APPS = [
+    'audit_trail.apps.AuditTrailConfig',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+LOCAL_APPS = [
+    'companies.apps.CompaniesConfig',
+]
 
-MIDDLEWARE = [
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+DJANGO_MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +58,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+THIRD_PARTY_MIDDLEWARE = [
+    'audit_trail.middleware.AuditMiddleware',
+]
+
+MIDDLEWARE = DJANGO_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE
 
 ROOT_URLCONF = 'djauditsample.urls'
 

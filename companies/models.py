@@ -2,13 +2,10 @@ from uuid import uuid4
 
 from django.db import models
 
-
-class StrMixin:
-    def __str__(self):
-        return self.name
+from audit_trail.history import AuditManager, AuditTrail
 
 
-class Organization(StrMixin, models.Model):
+class Organization(models.Model):
     """Organization model."""
 
     uuid = models.UUIDField(default=uuid4, primary_key=True)
@@ -19,12 +16,20 @@ class Organization(StrMixin, models.Model):
 
     is_active = models.BooleanField(default=False)
 
+    history = AuditTrail()
+
+    objects = AuditManager.as_manager()
+
     class Meta:
         """Meta options."""
         ordering = ('name',)
+        display_format = 'Org. {organization.name}'
+
+    def __str__(self):
+        return self.name
 
 
-class Commerce(StrMixin, models.Model):
+class Commerce(models.Model):
     """Commerce model."""
 
     uuid = models.UUIDField(default=uuid4, primary_key=True)
@@ -41,6 +46,11 @@ class Commerce(StrMixin, models.Model):
 
     is_active = models.BooleanField(default=True)
 
+    history = AuditTrail()
+
+    objects = AuditManager.as_manager()
+
     class Meta:
         """Meta options."""
         ordering = ('name',)
+        display_format = 'Comm. {commerce.name}'
