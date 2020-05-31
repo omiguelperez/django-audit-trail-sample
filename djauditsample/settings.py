@@ -40,6 +40,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'drf_yasg',
     'audit_trail.apps.AuditTrailConfig',
 ]
 
