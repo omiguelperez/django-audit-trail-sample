@@ -1,6 +1,5 @@
 from django.apps import apps
 from django.contrib import admin
-from django.contrib.admin.sites import AlreadyRegistered
 from django.contrib.admin.utils import unquote
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
@@ -13,6 +12,8 @@ from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
+
+from audit_trail.apps import AuditTrailConfig
 
 
 class AuditTrailAdmin(admin.ModelAdmin):
@@ -94,3 +95,12 @@ def get_audit_trail(model_name, object_id):
                          'previous_val', 'previous_val_type',
                          'xaction__display_text'
                          )
+
+
+app_models = apps.get_app_config(AuditTrailConfig.name).get_models()
+
+for model in app_models:
+    try:
+        admin.site.register(model)
+    except admin.sites.AlreadyRegistered:
+        pass
