@@ -13,7 +13,7 @@ from django.utils.encoding import force_text
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
-from audit_trail.apps import AuditTrailConfig
+from audit_trail.models import ContentType, Entity, Xaction
 
 
 class AuditTrailAdmin(admin.ModelAdmin):
@@ -97,10 +97,23 @@ def get_audit_trail(model_name, object_id):
                          )
 
 
-app_models = apps.get_app_config(AuditTrailConfig.name).get_models()
+@admin.register(Xaction)
+class XactionAdmin(admin.ModelAdmin):
+    list_display = (
+        'id', 'entity', 'xaction_type',
+        'display_text', 'pfield_val',
+        'ts', 'user',
+    )
+    list_filter = ('xaction_type', 'entity', 'ts')
+    search_fields = ('entity__entity_name', 'display_text', 'user__email')
 
-for model in app_models:
-    try:
-        admin.site.register(model)
-    except admin.sites.AlreadyRegistered:
-        pass
+
+@admin.register(ContentType)
+class ContentTypeAdmin(admin.ModelAdmin):
+    search_fields = ('type',)
+
+
+@admin.register(Entity)
+class EntityAdmin(admin.ModelAdmin):
+    list_display = ('entity_name', 'primary_field', 'display_format', 'status')
+    search_fields = ('entity_name',)

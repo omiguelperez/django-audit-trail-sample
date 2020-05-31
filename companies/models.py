@@ -23,7 +23,7 @@ class Organization(models.Model):
     class Meta:
         """Meta options."""
         ordering = ('name',)
-        display_format = 'Org. {organization.name}'
+        display_format = '{organization}'
 
     def __str__(self):
         return self.name
@@ -53,4 +53,4 @@ class Commerce(models.Model):
     class Meta:
         """Meta options."""
         ordering = ('name',)
-        display_format = 'Comm. {commerce.name}'
+        display_format = '{commerce}'

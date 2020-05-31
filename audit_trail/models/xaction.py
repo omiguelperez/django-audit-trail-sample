@@ -70,3 +70,14 @@ class Xaction(models.Model):
         verbose_name_plural = _('Xactions')
         verbose_name = _('Xaction')
         ordering = ['-ts']
+
+    def __str__(self):
+        """Returns friendly description."""
+        msg = '{xaction_type} {entity} {key} at {ts} by {user}'.format(
+            xaction_type = self.xaction_type,
+            entity=self.display_text,
+            key=self.pfield_val,
+            ts=self.ts,
+            user=self.user
+        )
+        return msg
